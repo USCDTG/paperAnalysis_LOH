@@ -1,0 +1,60 @@
+---
+title: "Sample LOH identification analysis"
+author: "Michelle Webb"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tLOH)
+library(extrafont)
+library(data.table)
+library(VariantAnnotation)
+library(stringr)
+library(naniar)
+library(dplyr)
+library(stats)
+library(utils)
+library(VariantAnnotation)
+library(GenomicRanges)
+library(MatrixGenerics)
+library(bestNormalize)
+library(ggplot2)
+library(purrr)
+library(data.table)
+library(depmixS4)
+```
+
+
+```{r VCF Import, message = FALSE}
+source('mainFunctions.R')
+sample <- importVCF('sample_tLOH.vcf') # This function imports the VCF file and outputs a dataframe with per-cluster information
+```
+
+
+```{r Bayes Factor Calculation}
+output <- tLOHCalcUpdate(sample, 1.25,1.25,500,500,4) # This function calculates bayes factor K values from read counts at each SNP site
+head(output, 5) # View the first 5 rows of the dataframe
+``` 
+
+```{r HMM}
+data(initialStartProbabilities)
+output <- hiddenMarkovAnalysis2(output, initialStartProbabilities) # Apply HMM to each chromosome and each cluster
+head(output, 5) # View the first 5 rows of the dataframe
+```
+
+
+```{r Visualization 1}
+plot1 <- plotAlleleFractions(output) # Visualize the allele fractions and state assignments for each cluster
+plot1 # View plot
+```
+
+
+
+```{r Visualization 2}
+plot2 <- plotSegments(output) # Visualize the segments highlighted by state assignments for each cluster
+plot2 # View plot
+```
