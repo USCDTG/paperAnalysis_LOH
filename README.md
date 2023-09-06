@@ -1,4 +1,4 @@
-#Spatial Loss of Heterozygosity Identification
+# Spatial Loss of Heterozygosity Identification
 
 The diagram below describes our bioinformatic approach for loss of heterozygosity (LOH) identification in spatial clusters.
 
@@ -27,7 +27,7 @@ A custom script is run to calculate allele counts at known heterozygous SNP site
 #### Spatial Transcriptomics LOH Identification
 A sample VCF is imported in R as a dataframe. Bayes factors are calculated at each SNP site. A Hidden Markov model segmentation approach is applied in a per-chromosome, per-cluster system. Cumulative metrics across segments are evaluated to make state determinations of heterozygous, LOH, or undefined. Two plotting functions are provided for output visualization.
 
-The main analysis functions for this process are available through Bioconductor at https://www.bioconductor.org/packages/release/bioc/html/tLOH.html. However, the most recent functions will not be available until the upcoming fall release in October. Therefore, an R script with all updated functions is available in this repository as mainFunctions.R.
+The main analysis functions for this process are available through Bioconductor at https://www.bioconductor.org/packages/release/bioc/html/tLOH.html. However, the most recent functions will not be available until the upcoming fall release in October. Therefore, an R script with all updated functions is available in this repository as mainFunctions.R. Function names may be changed in the upcoming update.
 
 
 
@@ -128,8 +128,12 @@ Details on running the exome sequencing analysis can be found in ExomeDataPrepar
 
 #### Spatial Transcriptomics Pre-processing
 
-The script below, also attached as preProcessing_tLOH.sh, runs several steps to prepare a VCF with cluster-specific allele counts at heterozygous SNP sites. To test out this analysis, the path to the testDirectory must be updated in the script.
+The script below, saved as preProcessing_tLOH.sh, runs several steps to prepare a VCF with cluster-specific allele counts at heterozygous SNP sites. To test out this analysis, the path to a testDirectory must be updated in the script. A sample directory tree is also shown.
 
+![image](directoryTreeExample.png)
+
+
+preProcessing_tLOH.sh:
 
 ```
 #!/bin/bash
@@ -197,7 +201,7 @@ data('initialStartProbabilities')
 source ('~/mainFunctions.R')
 
 # Import VCF of all spatial sample allele counts at known heterozygous SNP sites
-importedData <- importVCF('spatialAlleleCounts_byCluster.vcf')
+importedData <- importVCF('sample_tLOH.vcf')
 
 # Calculate Bayes factor values at each SNP site
 bayesCalculations <- tLOHCalcUpdate(importedData, 1.25,1.25,500,500,4)
