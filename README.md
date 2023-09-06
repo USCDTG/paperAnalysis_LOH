@@ -207,7 +207,7 @@ importedData <- importVCF('sample_tLOH.vcf')
 bayesCalculations <- tLOHCalcUpdate(importedData, 1.25,1.25,500,500,4)
 
 # Apply HMM to identify segments and annotate with state assignments
-hmmOutput <- hiddenMarkovAnalysis2(bayesCalculations, initialStartProbabilities, transitionProbabilities)
+hmmOutput <- hiddenMarkovAnalysis2(bayesCalculations, initialStartProbabilities)
 
 # Visualize final results
 plot1 <- plotSegments(hmmOutput)
