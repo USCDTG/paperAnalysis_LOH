@@ -81,7 +81,7 @@ R (>= 4.2.0)
 scales v1.2.1       
 tidyverse v2.0.0         
 ggplot2 v3.4.2         
-data.table         
+data.table v1.14.8        
 purrr v1.0.1        
 dplyr v1.1.2         
 VariantAnnotation  v.1.44.1      
