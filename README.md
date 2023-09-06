@@ -35,17 +35,35 @@ An example analysis is described in the exampleLOH_analysis.html vignette. To ru
 2. graphclusters.csv # available at NCBI GEO
 3. filtered and annotated exome VCF file # example in references directory
 
-
 ## Dependencies
 
 Exome Analysis:       
-bwa         
-samtools          
-gatk           
-snpEff          
+bwa v17        
+samtools v1.9       
+gatk v4.0.10.1           
+snpEff v4.3         
 
-Spatial Pre-processing Analysis:                 
+Spatial Pre-processing Analysis:         
+spaceranger v1.1.0                        
 Python 3.6.15 (all package dependencies shown in spatialProcessingEnvironment.yml)         
+
+Spatial LOH Analysis: 
+R (>= 4.2.0)      
+**R packages**          
+scales v1.2.1       
+tidyverse v2.0.0         
+ggplot2 v3.4.2         
+data.table         
+purrr v1.0.1        
+dplyr v1.1.2         
+VariantAnnotation  v.1.44.1      
+GenomicRanges v.1.50.2         
+naniar v1.0.0       
+depmixS4 v1.5.0        
+stringr v1.5.0       
+stats v4.2.1        
+bestNormalize v1.9.0        
+
 
 ## Conda environment setup
 
@@ -70,7 +88,29 @@ conda install [package=version] # add package and version name
 **Michelle G. Webb**      
 michelgw@usc.edu
 
-## References
+## Acknowledgments
+**10X Visium Spatial Gene Expression** https://www.10xgenomics.com/products/spatial-gene-expression              
+**R:** R Core Team (2019). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.          
+**depmixS4** Visser I, Speekenbrink M (2010). “depmixS4: An R Package for Hidden Markov Models.” Journal of Statistical Software, 36(7), 1–21. https://www.jstatsoft.org/v36/i07/.          
+**scales:** Hadley Wickham and Dana Seidel (2020). scales: Scale Functions for Visualization. R package version 1.1.1. https://CRAN.R-project.org/package=scales                          
+**tidyverse:** Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686          
+**ggplot2:** H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York 2016.                
+**data.table:** Matt Dowle and Arun Srinivasan (2020). data.table: Extension of \`data.frame\`. R package version 1.13.0. https://CRAN.R-project.org/package=data.table                   
+**purrr:** Lionel Henry and Hadley Wickham (2020). purrr: Functional Programming Tools. R package version 0.3.4. https://CRAN.R-project.org/package=purrr                           
+**dplyr:** Hadley Wickham, Romain François, Lionel Henry and Kirill Müller (2020). dplyr: A Grammar of Data Manipulation. R package version 1.0.0. https://CRAN.R-project.org/package=dplyr                                 
+**VariantAnnotation:** Obenchain V, Lawrence M, Carey V, Gogarten S, Shannon P, Morgan M (2014).
+“VariantAnnotation: a Bioconductor package for exploration and annotation of
+genetic variants.” _Bioinformatics_, *30*(14), 2076-2078. doi:
+10.1093/bioinformatics/btu168 (URL:
+https://doi.org/10.1093/bioinformatics/btu168).                 
+**GenomicRanges:** Lawrence M, Huber W, Pag\`es H, Aboyoun P, Carlson M, et al. (2013) Software
+  for Computing and Annotating Genomic Ranges. PLoS Comput Biol 9(8): e1003118.
+  doi:10.1371/journal.pcbi.1003118                        
+**Bayes factors** Jeffreys, Harold (1998) [1961]. The Theory of Probability(3rd ed.). 
+Oxford, England. p. 432. ISBN 9780191589676.                 
+**Best Normalize** Peterson RA (2021). “Finding Optimal Normalizing Transformations via bestNormalize.” The R Journal, 13(1), 310–329. doi:10.32614/RJ-2021-041.
+Peterson RA, Cavanaugh JE (2020). “Ordered quantile normalization: a semiparametric transformation built for the cross-validation era.” Journal of Applied Statistics, 47(13-15), 2312-2327. doi:10.1080/02664763.2019.1630372.                  
+**Naniar** https://cran.r-project.org/web/packages/naniar/index.html
 
 
 
