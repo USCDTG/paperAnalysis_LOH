@@ -12,7 +12,7 @@ The diagram below describes our bioinformatic approach for loss of heterozygosit
 
 ## Overview
 
-![image](analysisPipeline.png)
+![image](images/analysisPipeline.png)
 
 #### Exome Sequencing Germline/Tumor Analysis
 Heterozygous SNP sites are first obtained through an exome bioinformatic analysis. FASTQs for germline and tumor are individually aligned to the human GRCh38 reference genome using bwa. GATK base recalibration and duplicate marking tools are applied to the resultant BAMs. GATK HaplotypeCaller is run with a list of both the germline and tumor BAMs as input. The snpEff tool annotates the joint VCF with information from dbSNP 148 (hg38). This VCF is filtered for heterozygous SNP sites. The file ExomeDataPreparation.md contains the primary commands used in this process.
@@ -41,7 +41,7 @@ Our approach for spatial LOH analysis was developed in the following environment
 ### Software Requirements
 The diagram below lists the primary software and hardware requirements to run an analysis. It is important to note that the exome sequencing steps were part of a much larger analysis pipeline, so the general run time is longer than if the steps were processed individually.
 
-![image](workflowDiagram.png)
+![image](images/workflowDiagram.png)
 
 ### Conda Environment
 
@@ -130,7 +130,7 @@ Details on running the exome sequencing analysis can be found in ExomeDataPrepar
 
 The script below, saved as preProcessing_tLOH.sh, runs several steps to prepare a VCF with cluster-specific allele counts at heterozygous SNP sites. To test out this analysis, the path to a testDirectory must be updated in the script. A sample directory tree is also shown.
 
-![image](directoryTreeExample.png)
+![image](images/directoryTreeExample.png)
 
 
 preProcessing_tLOH.sh:
