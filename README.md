@@ -32,11 +32,15 @@ The main analysis functions for this process are available through Bioconductor 
 
 
 ## System Requirements
-### Hardware Requirements
+
 Our approach for spatial LOH analysis was developed in the following environments:
 
 - Linux CentOS v3.10.0-1062.4.1.el7.x86_64
+	- USC Center for Advanced Research Computing system
+	- 64 GB memory nodes
 - Mac OSX v10.14.6
+	- 2.9 GHz Intel Core i7 processor
+	- 16 GB memory
 
 ### Software Requirements
 The diagram below lists the primary software and hardware requirements to run an analysis. It is important to note that the exome sequencing steps were part of a much larger analysis pipeline, so the general run time is longer than if the steps were processed individually.
