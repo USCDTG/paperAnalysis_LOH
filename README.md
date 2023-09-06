@@ -3,12 +3,14 @@
 The diagram below describes our bioinformatic approach for loss of heterozygosity (LOH) identification in spatial clusters.
 
 ## Contents
-- Bioinformatic Approach
-- Example Analysis
-- Dependencies
+- Overview
+- System Requirements
+- Installation Guide
+- Demo
 - Contact
+- References
 
-## Bioinformatic Approach
+## Overview
 
 ![image](analysisPipeline.png)
 
@@ -25,29 +27,55 @@ A custom script is run to calculate allele counts at known heterozygous SNP site
 #### Spatial Transcriptomics LOH Identification
 A sample VCF is imported in R as a dataframe. Bayes factors are calculated at each SNP site. A Hidden Markov model segmentation approach is applied in a per-chromosome, per-cluster system. Cumulative metrics across segments are evaluated to make state determinations of heterozygous, LOH, or undefined. Two plotting functions are provided for output visualization.
 
-The main analysis functions for this process are available through Bioconductor at https://www.bioconductor.org/packages/release/bioc/html/tLOH.html. However, the most recent functions will not be available until the upcoming fall release in October. Therefore, an R script with all updated functions is available in this repository as functions.R.
+The main analysis functions for this process are available through Bioconductor at https://www.bioconductor.org/packages/release/bioc/html/tLOH.html. However, the most recent functions will not be available until the upcoming fall release in October. Therefore, an R script with all updated functions is available in this repository as mainFunctions.R.
 
-## Example Analysis
 
-An example analysis is described in the exampleLOH_analysis.html vignette. To run an example analysis from pre-procesing, the following files will be used as input:          
 
-1. spatial transcriptomics BAM # available at NCBI GEO
-2. graphclusters.csv # available at NCBI GEO
-3. filtered and annotated exome VCF file # example in references directory
+## System Requirements
+### Hardware Requirements
+Our approach for spatial LOH analysis was developed in the following environments:
 
-## Dependencies
+- Linux CentOS v3.10.0-1062.4.1.el7.x86_64
+- Mac OSX v10.14.6
 
-Exome Analysis:       
+### Software Requirements
+The diagram below lists the primary software and hardware requirements to run an analysis. It is important to note that the exome sequencing steps were part of a much larger analysis pipeline, so the general run time is longer than if the steps were processed individually.
+
+![image](workflowDiagram.png)
+
+### Conda Environment
+
+Specific python (v3.6) packages are required to run the preProcessing_tLOH.sh script.  We utilized conda v4.12.0 in our testing and recommend using a conda environment to ensure correct installation of necessary modules. To generate a conda environment the following commands can be run.
+
+```
+conda env create --name spatialEnv --file=spatialProcessingEnvironment.yml
+conda activate spatialEnv
+```
+Alternatively, a new conda environment can be created and each package/version listed in the .yml can be installed individually. For example:
+
+```
+conda create -n spatialEnv python=3.6
+conda activate spatialEnv
+conda config --add channels r
+conda config --add channels bioconda
+conda install -c bioconda
+conda install pysam=0.15.4
+conda install [package=version] # add package and version name
+```
+
+### Dependencies
+Exome Sequencing Germline/Tumor Analysis:       
 bwa v17        
 samtools v1.9       
 gatk v4.0.10.1           
 snpEff v4.3         
 
-Spatial Pre-processing Analysis:         
+Spatial Transcriptomics Pre-processing:         
 spaceranger v1.1.0                        
-Python 3.6.15 (all package dependencies shown in spatialProcessingEnvironment.yml)         
+Python 3.6.15 (all necessary dependencies in spatialProcessingEnvironment.yml)         
+R (>= 4.2.0)
 
-Spatial LOH Analysis: 
+Spatial Transcriptomics LOH Identification: 
 R (>= 4.2.0)      
 **R packages**          
 scales v1.2.1       
@@ -62,33 +90,136 @@ naniar v1.0.0
 depmixS4 v1.5.0        
 stringr v1.5.0       
 stats v4.2.1        
-bestNormalize v1.9.0        
+bestNormalize v1.9.0
 
 
-## Conda environment setup
-
-Specific python (v3.6) packages are required to run the preProcessing_tLOH.sh script. The spatial ProcessingEnvironment.yml file lists these functions. To generate a conda environment which contains these packages, the following commands can be run.
-
-```
-conda env create --name spatialEnv --file=spatialProcessingEnvironment.yml
-```
-Alternatively, a new conda environment can be created and each package/version listed in the .yml can be installed. For example:
+## Installation Guide
+### Current Release
+The current version of the tLOH R package is v1.5.6. The next version of this package with updated functionality and documentation will be available with the Bioconductor 3.18 release on October 25. 
 
 ```
-conda create -n myEnv python=3.6
-conda activate myEnv
-conda config --add channels r
-conda config --add channels bioconda
-conda install -c bioconda
-conda install pysam=0.15.4
-conda install [package=version] # add package and version name
+# R v4.2.1
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+Biocmanager::install(tLOH)
+```
+Installation time is approximately five minutes on a Mac computer with 16GB memory and 2.9 GHz Intel Core i7processor.
+
+
+### Development Version
+
+Updated functions are available in the file mainFunctions.R. As shown in the vignette exampleLOHanalysis.html, the following command can be run in R to load updated functions:
+
+```
+# R v4.2.1
+source ('~/mainFunctions.R') # adjust path to where this file is located
+```
+
+
+## Demo
+
+Data for this project is available through the NCBI Gene Expression Omnibus. 
+
+
+#### Exome Sequencing Germline/Tumor Analysis
+
+Details on running the exome sequencing analysis can be found in ExomeDataPreparation.md.
+
+#### Spatial Transcriptomics Pre-processing
+
+The script below, also attached as preProcessing_tLOH.sh, runs several steps to prepare a VCF with cluster-specific allele counts at heterozygous SNP sites. To test out this analysis, the path to the testDirectory must be updated in the script.
+
+
+```
+#!/bin/bash
+
+time=`date +%d-%m-%Y-%H-%M`
+echo "Start:$time"
+echo ' '
+
+conda activate spatialEnv
+
+sample='sampleName'
+testDir='testDirectory/' # Edit this path to a location for a test directory
+scripts=`echo ${testDir}/scripts` # directory should contain splitBAMs.py, pythonAnalysis.py, convert_to_VCF.py, and filter.R
+
+references=`echo ${testDir}/references` # directory should contain ${sample}_graphclusters.csv, ${sample}_heterozygousSNPsites.vcf, ${sample}_possorted_genome.bam, and ${sample}_possorted_genome.bam.bai
+
+echo '# Splitting BAM to cluster mini-BAMs'
+python ${scripts}/splitBAMs.py --bam ${references}/${sample}_possorted_genome_bam.bam --clusters ${references}/${sample}_graphclusters.csv --output ${testDir}/outputBAM
+
+outputBAM=`echo ${testDir}/outputBAM`
+
+echo '# Creating output directories'
+mkdir ${outputBAM}/primaryAlignments
+mkdir ${testDir}/alleleCounts
+mkdir ${testDir}/filteredAlleleCounts
+
+echo '# Removing secondary alignments, indexing BAMs, and calculating allele counts for each cluster'
+echo ' '
+for i in `ls ${outputBAM}/*bam`; do \
+
+	cluster=`basename ${i}`
+
+	INDEX=`echo ${cluster} | sed 's/[^0-9]//g'`
+	echo '# Cluster' ${INDEX}
+	echo ' '
+ 	samtools index ${i}
+	samtools view -q30 -b ${i} -F 256 > ${outputBAM}/primaryAlignments/${sample}_cluster${INDEX}_primaryAlignments.bam
+	samtools index ${outputBAM}/primaryAlignments/${sample}_cluster${INDEX}_primaryAlignments.bam
+	python ${scripts}/pythonAnalysis.py ${references}/${sample}_heterozygousSNPsites.vcf ${outputBAM}/primaryAlignments/${sample}_cluster${INDEX}_primaryAlignments.bam ${sample}_${INDEX} ${testDir}/alleleCounts
+done
+
+echo ' '
+echo 'Filtering SNP sites'
+Rscript ${scripts}/filter.R ${testDir}/alleleCounts
+cp -v ${testDir}/alleleCounts/${sample}*filtered*.csv ${testDir}/filteredAlleleCounts
+echo '# Merging allele count csv files and converting to VCF format'
+echo ' '
+python ${scripts}/convert_to_VCF.py ${sample} ${testDir}/filteredAlleleCounts
+
+
+time=`date +%d-%m-%Y-%H-%M`
+echo "End: $time"
+
+```
+
+####  Spatial Transcriptomics LOH Identification
+
+
+The following code is an R analysis of a spatial sample after exome analysis and spaceranger processing has completed. An example with output is attached as exampleLOHanalysis.html.
+
+```
+# R v4.2.1
+library(tLOH)
+data('initialStartProbabilities')
+source ('~/mainFunctions.R')
+
+# Import VCF of all spatial sample allele counts at known heterozygous SNP sites
+importedData <- importVCF('spatialAlleleCounts_byCluster.vcf')
+
+# Calculate Bayes factor values at each SNP site
+bayesCalculations <- tLOHCalcUpdate(importedData, 1.25,1.25,500,500,4)
+
+# Apply HMM to identify segments and annotate with state assignments
+hmmOutput <- hiddenMarkovAnalysis2(bayesCalculations, initialStartProbabilities, transitionProbabilities)
+
+# Visualize final results
+plot1 <- plotSegments(hmmOutput)
+plot2 <- plotAlleleFractions(hmmOutput)
+
+# Visualize final results
+plot1
+plot2 
+
 ```
 
 ## Contact
 **Michelle G. Webb**      
 michelgw@usc.edu
 
-## Acknowledgments
+## References
 **10X Visium Spatial Gene Expression** https://www.10xgenomics.com/products/spatial-gene-expression              
 **R:** R Core Team (2019). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.          
 **depmixS4** Visser I, Speekenbrink M (2010). “depmixS4: An R Package for Hidden Markov Models.” Journal of Statistical Software, 36(7), 1–21. https://www.jstatsoft.org/v36/i07/.          
