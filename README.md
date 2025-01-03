@@ -1,6 +1,6 @@
 # Spatial Loss of Heterozygosity Identification
 
-The diagram below describes our bioinformatic approach for loss of heterozygosity (LOH) identification in spatial clusters.
+The diagram below describes our bioinformatic approach for loss of heterozygosity (LOH) identification in spatial clusters. Scripts for analysis of "Resolving spatial subclonal genomic heterogeneity of loss of heterozygosity and extrachromosomal DNA in gliomas" are available in the folder figureScripts.
 
 ## Contents
 - Overview
