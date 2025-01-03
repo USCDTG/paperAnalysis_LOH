@@ -208,10 +208,10 @@ source ('~/mainFunctions.R')
 importedData <- importVCF('sample_tLOH.vcf')
 
 # Calculate Bayes factor values at each SNP site
-bayesCalculations <- tLOHCalcUpdate(importedData, 1.25,1.25,500,500,4)
+bayesCalculations <- tLOHCalc(importedData, 1.25,1.25,500,500,4)
 
 # Apply HMM to identify segments and annotate with state assignments
-hmmOutput <- hiddenMarkovAnalysis2(bayesCalculations, initialStartProbabilities)
+hmmOutput <- hiddenMarkovAnalysis(bayesCalculations, initialStartProbabilities)
 
 # Visualize final results
 plot1 <- plotSegments(hmmOutput)
